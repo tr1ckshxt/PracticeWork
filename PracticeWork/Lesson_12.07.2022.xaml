@@ -47,14 +47,16 @@
                     </Style.Triggers>
                     <Setter Property="Effect">
                         <Setter.Value>
-                            <DropShadowEffect ShadowDepth="3" BlurRadius="0" Direction="300" Color="Coral">
+                            <DropShadowEffect ShadowDepth="3" BlurRadius="0" Direction="300" Color="DarkGreen">
                             </DropShadowEffect>
                         </Setter.Value>
                     </Setter>
-                    <Setter Property="Margin" Value="5"></Setter>
-                    <Setter Property="Height" Value="32"></Setter>
-                    <Setter Property="FontSize" Value="20"></Setter>
+                    <Setter Property="Template" Value="{DynamicResource ButtonTemplate}"/>
+                    <Setter Property="Margin" Value="5"/>
+                    <Setter Property="Height" Value="32"/>
+                    <Setter Property="FontSize" Value="20"/>
                 </Style>
+                
             </Grid.Resources>
             <Button Grid.Column="0" Content="Receipt" x:Name="ButtonReceipt" Click="ButtonReceipt_OnClick"/>
             <Button Grid.Column="2" Content="Edit" Click="EditClick"/>
