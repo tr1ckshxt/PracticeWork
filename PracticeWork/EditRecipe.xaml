@@ -5,7 +5,33 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ExploreWPF.CWs"
         mc:Ignorable="d"
-        Title="Edit Recipe" Height="480" Width="900">
+        Title="Edit Recipe" Height="520" Width="920">
+    <Window.Resources>
+        <SolidColorBrush x:Key="Button.Pressed.Background" Color="#FFC4E5F6"/>
+        <SolidColorBrush x:Key="Button.Pressed.Border" Color="#FF2C628B"/>
+        <SolidColorBrush x:Key="Button.Disabled.Background" Color="#FFF4F4F4"/>
+        <SolidColorBrush x:Key="Button.Disabled.Border" Color="#FFADB2B5"/>
+        <SolidColorBrush x:Key="Button.Disabled.Foreground" Color="#FF838383"/>
+        <ControlTemplate x:Key="ButtonTemplate" TargetType="{x:Type ButtonBase}">
+            <Border x:Name="border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" SnapsToDevicePixels="true">
+                <ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+            </Border>
+            <ControlTemplate.Triggers>
+                <Trigger Property="Button.IsDefaulted" Value="true">
+                    <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+                </Trigger>
+                <Trigger Property="IsPressed" Value="true">
+                    <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Pressed.Background}"/>
+                    <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Pressed.Border}"/>
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="false">
+                    <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Disabled.Background}"/>
+                    <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Disabled.Border}"/>
+                    <Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="{StaticResource Button.Disabled.Foreground}"/>
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+    </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
@@ -31,6 +57,37 @@
             <Style TargetType="TextBox">
                 <Setter Property="Margin" Value="10"></Setter>
             </Style>
+
+            <Style TargetType="Button">
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+
+                        <Trigger.EnterActions>
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                                                     To="0.6" Duration="0:0:0.2" />
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </Trigger.EnterActions>
+                        <Trigger.ExitActions>
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                                                     To="1" Duration="0:0:1" />
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </Trigger.ExitActions>
+                    </Trigger>
+</Style.Triggers>
+
+                <Setter Property="Effect">
+                    <Setter.Value>
+                        <DropShadowEffect ShadowDepth="3" BlurRadius="0" Direction="300" Color="Coral">
+                        </DropShadowEffect>
+                    </Setter.Value>
+                </Setter>
+            </Style>
         </Grid.Resources>
         <TextBlock Grid.Row="0" Text="Name: "/>
         <TextBlock Grid.Row="1" Text="Time of cooking: "/>
@@ -40,7 +97,7 @@
         <TextBox x:Name="NameTBx" Grid.Row="0" Grid.Column="1" Text="{Binding Name}"/>
         <TextBox x:Name="TimeTBx" Grid.Row="1" Grid.Column="1" Text="{Binding TimeOfCooking}"/>
         <TextBox x:Name="PortionsTxB" Grid.Row="2" Grid.Column="1" Text="{Binding Portions}"/>
-        <DockPanel Grid.Row="3" Grid.Column="1" Grid.RowSpan="2" LastChildFill="False" >
+        <DockPanel Margin="10" Grid.Row="3" Grid.Column="1" Grid.RowSpan="2" LastChildFill="False" >
             <DockPanel.Resources>
                 <Style TargetType="TextBox">
                     <Setter Property="Width" Value="87"/>
@@ -55,12 +112,12 @@
             <TextBox DockPanel.Dock="Left" x:Name="UnitsOfInd" Text="{Binding ElementName=Ingreds, Path=SelectedItem.Amount}"/>
             <TextBlock Text="Unit: "/>
             <TextBox DockPanel.Dock="Left" x:Name="AmountOfUnits" Text="{Binding ElementName=Ingreds, Path=SelectedItem.Units}"/>
-            <Button Height="25" Margin="0,0,10,0" x:Name="DelIng" Click="DelIng_OnClick" Content="Delete" DockPanel.Dock="Right" Width="60"/>
+            <Button Template="{DynamicResource ButtonTemplate}" Height="25" Margin="0,0,10,0" x:Name="DelIng" Click="DelIng_OnClick" Content="Delete" DockPanel.Dock="Right" Width="60"/>
 
-            <Button x:Name="btn_add" Click="Btn_add_OnClick" Content="Add" Height="25" DockPanel.Dock="Right" Width="60" Margin="10"/>
+            <Button Template="{DynamicResource ButtonTemplate}" x:Name="btn_add" Click="Btn_add_OnClick" Content="Add" Height="25" DockPanel.Dock="Right" Width="60" Margin="10"/>
 
         </DockPanel>
-        <TextBox HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"  AcceptsReturn ="True" TextWrapping = "Wrap" x:Name="OrderTB" Grid.Row="5" Grid.Column="1" Grid.RowSpan="2" DockPanel.Dock="Left" Height="90" Width="680" Text="{Binding CookingOrder}"/>
-        <Button Content="Accept" Grid.Row="7" Margin="15" x:Name="AcceptBtn" Click="AcceptBtn_OnClick"/>
+        <TextBox HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"  AcceptsReturn ="True" TextWrapping = "Wrap" x:Name="OrderTB" Grid.Row="5" Grid.Column="1" Grid.RowSpan="2" Height="90" Width="690" Text="{Binding CookingOrder}"/>
+        <Button Template="{DynamicResource ButtonTemplate}" Content="Accept" Grid.Row="7" Margin="15" x:Name="AcceptBtn" Click="AcceptBtn_OnClick"/>
     </Grid>
 </Window>
